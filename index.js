@@ -7,7 +7,7 @@
 import inquirer from 'inquirer';
 import qr from 'qr-image';
 import fs from 'fs'
-
+import path from 'path';
 inquirer
   .prompt([{
     /* Pass your questions in here */
@@ -16,22 +16,26 @@ inquirer
      type: 'input'
   }])
   .then((answers) => {
+    // Sanitize the URL to replace invalid characters
+    const sanitizedUrl = answers.url.replace(/[^a-zA-Z0-9]/g, '-');
+
     // Use user feedback for... whatever!!
-    var qr_png = qr.image(answers.url,{type: 'png'});
-    qr_png.pipe(fs.createWriteStream(`${answers.url}.png`));
-    //var png_string = qr.imageSync(answers.url, { type: 'png' });
-    fs.appendFile("URL.txt",answers.url,(err) =>{
-        if (err) throw err;
-        console.log("Saved url to file");
+    const qr_png = qr.image(answers.url, { type: 'png' });
+    qr_png.pipe(fs.createWriteStream(`${sanitizedUrl}.png`));
+
+    fs.appendFile('URL.txt', `${answers.url}\n`, (err) => {
+      if (err) throw err;
+      console.log('Saved URL to file');
     });
+  })
 
     //console.log(png_string)
-  })
+ 
   .catch((error) => {
     if (error.isTtyError) {
       // Prompt couldn't be rendered in the current environment
     } else {
-        console.log("ERROR");
+        console.log("ERROR",error);
       // Something else went wrong
     }
   });
