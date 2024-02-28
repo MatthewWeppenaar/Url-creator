@@ -19,8 +19,11 @@ inquirer
     // Use user feedback for... whatever!!
     var qr_png = qr.image(answers.url,{type: 'png'});
     qr_png.pipe(fs.createWriteStream(`${answers.url}.png`));
-    var png_string = qr.imageSync(answers.url, { type: 'png' });
-
+    //var png_string = qr.imageSync(answers.url, { type: 'png' });
+    fs.appendFile("URL.txt",answers.url,(err) =>{
+        if (err) throw err;
+        console.log("Saved url to file");
+    });
 
     //console.log(png_string)
   })
