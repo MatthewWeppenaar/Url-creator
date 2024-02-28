@@ -19,7 +19,6 @@ inquirer
     // Sanitize the URL to replace invalid characters
     const sanitizedUrl = answers.url.replace(/[^a-zA-Z0-9]/g, '-');
 
-    // Use user feedback for... whatever!!
     const qr_png = qr.image(answers.url, { type: 'png' });
     qr_png.pipe(fs.createWriteStream(`${sanitizedUrl}.png`));
 
@@ -33,9 +32,7 @@ inquirer
  
   .catch((error) => {
     if (error.isTtyError) {
-      // Prompt couldn't be rendered in the current environment
     } else {
         console.log("ERROR",error);
-      // Something else went wrong
     }
   });
